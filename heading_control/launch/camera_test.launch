@@ -7,20 +7,21 @@
 
 	<!-- Odometry -->
 	<remap from="odom" to="/ohm/odom" />
-	<include file="$(find helper_nodes)/launch/odometry.launch">
-		<arg name="lat" value="42.3200317" />
-		<arg name="lon" value="-83.2312428" />
-	</include>
-
-	<!-- Waypoint Service -->
-	<include file="$(find helper_nodes)/launch/waypoint.launch" />
+	<include file="$(find helper_nodes)/launch/odometry.launch" />
 
 	<!-- Heading Control -->
 	<remap from="auto_control" to="/ohm/auto_control" />
 	<remap from="lidar" to="/ohm/ranges" />
+	<remap from="camera" to="/ohm/camera" />
 	<include file="$(find heading_control)/launch/heading.launch">
-		<arg name="using_gps" value="true" />
+		<arg name="using_camera" value="true" />
 	</include>
+
+	<!-- White line detection -->
+	<remap from="camera_turn_angles" to="/ohm/camera" />
+	<param name="device" value="/dev/video1" />
+	<param name="debug" value="true" />
+	<node pkg="white_line_detection" type="white_line_detection" name="white_line_detection" />
 	
 	<!-- Joystick and Manual Control-->
 	<remap from="joy" to="/ohm/joy" />
